@@ -60,6 +60,7 @@ def get_diseases(
 
     symptoms = [symptom for symptom in symptoms if symptom in symptom_text_to_ids]
 
+    # match symptoms to IDs
     symptom_ids = [symptom_text_to_ids.get(symptom) for symptom in symptoms]
 
     # removed non-matched terms
@@ -70,6 +71,9 @@ def get_diseases(
 
     # remove any duplicate symptom IDs (if two text terms point to the same ID)
     symptom_ids = remove_duplicates_in_order(symptom_ids)
+
+    # position of each symptom ID
+    symptom_id_pos = dict(zip(symptom_ids, range(len(symptom_ids))))
 
     matched_diseases = {
         symptom_id: symptoms_to_disease_ids.get(symptom_id)
@@ -107,22 +111,24 @@ def get_diseases(
                 symptom_id
             ]["symptom_hpo_term"]
 
+            symptom_info = {
+                "symptom_id": symptom_id,
+                "symptom_hpo_term": disease_symptom_hpo_term,
+                "symptom_frequency": disease_symptom_frequency,
+            }
+
             if disease_id not in matched_diseases_info:
 
                 matched_diseases_info[disease_id] = {
                     "disease": disease_to_info_ids[disease_id],
                     "disease_genes": disease_to_genes_ids.get(disease_id, []),
-                    "matched_symptoms": [
-                        symptom_id,
-                        disease_symptom_hpo_term,
-                        disease_symptom_frequency,
-                    ],
+                    "matched_symptoms": [symptom_info],
                 }
 
             else:
 
                 matched_diseases_info[disease_id]["matched_symptoms"].append(
-                    [symptom_id, disease_symptom_hpo_term, disease_symptom_frequency]
+                    symptom_info
                 )
 
     matched_diseases_info = [
@@ -138,6 +144,19 @@ def get_diseases(
         matched_diseases_info = sorted(
             matched_diseases_info,
             key=lambda disease_info: -len(disease_info["matched_symptoms"]),
+        )
+
+    elif sort_method == "first_matched_symptom":
+
+        # sort by position of the first-matched symptom in the text query
+        matched_diseases_info = sorted(
+            matched_diseases_info,
+            key=lambda disease_info: min(
+                [
+                    symptom_id_pos[symptom["symptom_id"]]
+                    for symptom in disease_info["matched_symptoms"]
+                ]
+            ),
         )
 
     return matched_diseases_info
