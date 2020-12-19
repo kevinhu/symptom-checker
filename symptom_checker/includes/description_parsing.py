@@ -12,6 +12,24 @@ from symptom_checker.includes.utils import (
 
 nlp = spacy.load("en_core_sci_md")
 
+CONVERT_PREVALENCE = {
+    "Excluded": "Excluded (0%)",
+    "Very rare": "Very rare (<4-1%)",
+    "Occasional": "Occasional (29-5%)",
+    "Frequent": "Frequent (79-30%)",
+    "Very frequent": "Very frequent (99-80%)",
+    "Obligate": "Obligate (100%)",
+}
+
+PREVALENCE_RANK = {
+    "Excluded (0%)": -1,
+    "Very rare (<4-1%)": 1,
+    "Occasional (29-5%)": 2,
+    "Frequent (79-30%)": 3,
+    "Very frequent (99-80%)": 4,
+    "Obligate (100%)": 5,
+}
+
 with open(DATA_DIR / "processed" / "disease_to_info_ids.json", "r") as f:
     disease_to_info_ids = ujson.load(f)
 
@@ -36,7 +54,9 @@ def get_symptoms(text: str) -> List[str]:
     return [phrase.text for phrase in nlp(text).noun_chunks]
 
 
-def get_diseases(symptoms: List[str]) -> List[str]:
+def get_diseases(
+    symptoms: List[str], min_frequency: str, sort_method: str
+) -> List[str]:
 
     symptom_ids = [symptom_text_to_ids.get(symptom) for symptom in symptoms]
 
@@ -55,7 +75,11 @@ def get_diseases(symptoms: List[str]) -> List[str]:
     }
 
     # symptom info per matched disease
-    matched_diseases_info = {}
+    matched_diseases_info = dict()
+
+    disease_blacklist = set()
+
+    min_frequency_rank = PREVALENCE_RANK[CONVERT_PREVALENCE[min_frequency]]
 
     for symptom_id, disease_ids in matched_diseases.items():
 
@@ -64,6 +88,18 @@ def get_diseases(symptoms: List[str]) -> List[str]:
             disease_symptom_frequency = disease_to_symptoms_complete[disease_id][
                 symptom_id
             ]["symptom_frequency"]
+
+            disease_symptom_frequency_rank = PREVALENCE_RANK[disease_symptom_frequency]
+
+            # if symptom not found in disease, blacklist the disease
+            if disease_symptom_frequency_rank == -1:
+
+                disease_blacklist.add(disease_id)
+
+            # if frequency rank falls below minimum, skip
+            if disease_symptom_frequency_rank < min_frequency_rank:
+
+                continue
 
             disease_symptom_hpo_term = disease_to_symptoms_complete[disease_id][
                 symptom_id
@@ -86,5 +122,12 @@ def get_diseases(symptoms: List[str]) -> List[str]:
                 matched_diseases_info[disease_id]["matched_symptoms"].append(
                     [symptom_id, disease_symptom_hpo_term, disease_symptom_frequency]
                 )
+
+    matched_diseases_info = [
+        disease_info
+        for disease_id, disease_info in matched_diseases_info.items()
+        if disease_id not in disease_blacklist
+        and len(disease_info["matched_symptoms"]) > 0
+    ]
 
     return matched_diseases_info
