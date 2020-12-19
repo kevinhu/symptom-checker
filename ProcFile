@@ -1,5 +1,0 @@
-fetch_db: 'poetry run ./symptom_checker/construction/fetch_db.py'
-db_to_json: 'poetry run ./symptom_checker/construction/db_to_json.py'
-finalize_db: 'poetry run ./symptom_checker/construction/finalize_db.py'
-
-web: sh -c 'cd symptom_checker/server && poetry run gunicorn server.wsgi'

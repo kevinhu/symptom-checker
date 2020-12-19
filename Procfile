@@ -1,0 +1,1 @@
+web: sh -c 'cd symptom_checker/server && poetry run gunicorn server.wsgi'
