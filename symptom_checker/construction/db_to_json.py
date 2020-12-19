@@ -6,6 +6,7 @@ from symptom_checker.config import DATA_DIR
 from symptom_checker.includes.db_processing import (
     process_disease,
     process_disease_symptoms,
+    process_disease_genes,
 )
 
 json_kwargs = {"indent": 2}
@@ -35,6 +36,7 @@ diseases = [process_disease(elem) for elem in diseases_xml]
 disease_to_symptoms = [
     process_disease_symptoms(elem) for elem in disease_to_symptoms_xml
 ]
+disease_to_genes = [process_disease_genes(elem) for elem in disease_to_genes_xml]
 
 # write out JSONs
 with open(DATA_DIR / "intermediate" / "diseases.json", "w") as f:
@@ -42,3 +44,6 @@ with open(DATA_DIR / "intermediate" / "diseases.json", "w") as f:
 
 with open(DATA_DIR / "intermediate" / "disease_to_symptoms.json", "w") as f:
     ujson.dump(disease_to_symptoms, f, **json_kwargs)
+
+with open(DATA_DIR / "intermediate" / "disease_to_genes.json", "w") as f:
+    ujson.dump(disease_to_genes, f)

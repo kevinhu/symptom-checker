@@ -152,3 +152,87 @@ def process_disease_symptoms(disease_elem: ET.XML) -> Dict[str, Union[str, List[
         "disease_group": disease_group,
         "symptoms": symptoms,
     }
+
+
+def process_disease_genes(disease_elem: ET.XML) -> Dict[str, Union[str, List[Any]]]:
+
+    """
+    Process a disease-genes element in the <DisorderList> group for en_product6.
+    Args:
+        disease_elem:
+            ElementTree object corresponding to the disease and genes.
+    Returns:
+        dictionary of disease attributes and genes
+    """
+
+    disease_id = disease_elem.attrib["id"]
+    disease_code = disease_elem.find("OrphaCode").text
+    disease_link = disease_elem.find("ExpertLink").text
+    disease_name = disease_elem.find("Name").text
+    disease_type = disease_elem.find("DisorderType/Name").text
+    disease_group = disease_elem.find("DisorderGroup/Name").text
+
+    def process_gene(gene_association_elem):
+
+        """
+        Process a disease gene element.
+        """
+
+        gene_source = gene_association_elem.find("SourceOfValidation").text
+        gene_elem = gene_association_elem.find("Gene")
+        gene_name = gene_elem.find("Name").text
+        gene_symbol = gene_elem.find("Symbol").text
+        gene_synonyms = [elem.text for elem in gene_elem.find("SynonymList")]
+        gene_type = gene_elem.find("GeneType").text
+
+        gene_external_references = [
+            {
+                "source": elem.find("Source").text,
+                "reference": elem.find("Reference").text,
+            }
+            for elem in gene_elem.find("ExternalReferenceList")
+        ]
+
+        gene_loci = [
+            elem.find("GeneLocus").text for elem in gene_elem.find("LocusList")
+        ]
+
+        gene_association_type_elem, gene_association_status_elem = (
+            gene_elem.find("DisorderGeneAssociationType/Name"),
+            gene_elem.find("DisorderGeneAssociationStatus/Name"),
+        )
+
+        gene_association_type = ""
+        gene_association_status = ""
+
+        # overwrite if exists
+        if gene_association_type_elem is not None:
+            gene_association_type = gene_association_type_elem.text
+
+        if gene_association_status_elem is not None:
+            gene_association_status = gene_association_status_elem.text
+
+        return {
+            "gene_source": gene_source,
+            "gene_name": gene_name,
+            "gene_symbol": gene_symbol,
+            "gene_synonyms": gene_synonyms,
+            "gene_type": gene_type,
+            "gene_loci": gene_loci,
+            "gene_association_type": gene_association_type,
+            "gene_association_status": gene_association_status,
+        }
+
+    disease_genes = [
+        process_gene(elem) for elem in disease_elem.find("DisorderGeneAssociationList")
+    ]
+
+    return {
+        "disease_id": disease_id,
+        "disease_code": disease_code,
+        "disease_link": disease_link,
+        "disease_name": disease_name,
+        "disease_type": disease_type,
+        "disease_group": disease_group,
+        "disease_genes": disease_genes,
+    }
