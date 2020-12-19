@@ -5,7 +5,7 @@ description = ""
 authors = ["Kevin Hu <kevinhuwest@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8.1"
+python = "3.8.1"
 Django = "^3.1.4"
 tqdm = "^4.54.1"
 ujson = "^4.0.1"
