@@ -49,8 +49,42 @@ def get_diseases(symptoms: List[str]) -> List[str]:
     # remove any duplicate symptom IDs (if two text terms point to the same ID)
     symptom_ids = remove_duplicates_in_order(symptom_ids)
 
-    disease_ids = [
-        symptoms_to_disease_ids.get(symptom_id) for symptom_id in symptom_ids
-    ]
+    matched_diseases = {
+        symptom_id: symptoms_to_disease_ids.get(symptom_id)
+        for symptom_id in symptom_ids
+    }
 
-    return disease_ids
+    # symptom info per matched disease
+    matched_diseases_info = {}
+
+    for symptom_id, disease_ids in matched_diseases.items():
+
+        for disease_id in disease_ids:
+
+            disease_symptom_frequency = disease_to_symptoms_complete[disease_id][
+                symptom_id
+            ]["symptom_frequency"]
+
+            disease_symptom_hpo_term = disease_to_symptoms_complete[disease_id][
+                symptom_id
+            ]["symptom_hpo_term"]
+
+            if disease_id not in matched_diseases_info:
+
+                matched_diseases_info[disease_id] = {
+                    "disease": disease_to_info_ids[disease_id],
+                    "disease_genes": disease_to_genes_ids.get(disease_id, []),
+                    "matched_symptoms": [
+                        symptom_id,
+                        disease_symptom_hpo_term,
+                        disease_symptom_frequency,
+                    ],
+                }
+
+            else:
+
+                matched_diseases_info[disease_id]["matched_symptoms"].append(
+                    [symptom_id, disease_symptom_hpo_term, disease_symptom_frequency]
+                )
+
+    return matched_diseases_info
