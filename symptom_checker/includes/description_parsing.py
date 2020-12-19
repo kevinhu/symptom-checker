@@ -58,6 +58,8 @@ def get_diseases(
     symptoms: List[str], min_frequency: str, sort_method: str
 ) -> List[str]:
 
+    symptoms = [symptom for symptom in symptoms if symptom in symptom_text_to_ids]
+
     symptom_ids = [symptom_text_to_ids.get(symptom) for symptom in symptoms]
 
     # removed non-matched terms
@@ -129,5 +131,13 @@ def get_diseases(
         if disease_id not in disease_blacklist
         and len(disease_info["matched_symptoms"]) > 0
     ]
+
+    # sort by number of matched symptoms (greatest first)
+    if sort_method == "num_matched_symptoms":
+
+        matched_diseases_info = sorted(
+            matched_diseases_info,
+            key=lambda disease_info: -len(disease_info["matched_symptoms"]),
+        )
 
     return matched_diseases_info
