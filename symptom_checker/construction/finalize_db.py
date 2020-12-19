@@ -1,4 +1,5 @@
-from typing import Dict, Any
+from typing import Any, Dict
+
 import ujson
 
 from symptom_checker.config import DATA_DIR

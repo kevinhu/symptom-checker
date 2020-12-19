@@ -1,11 +1,9 @@
-from django.shortcuts import render
+import ujson
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-import ujson
-
-from symptom_checker.includes.description_parsing import get_symptoms, get_diseases
-
+from symptom_checker.includes.description_parsing import get_diseases, get_symptoms
 
 VALID_MIN_FREQUENCIES = [
     "Very rare",

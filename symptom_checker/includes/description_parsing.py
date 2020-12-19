@@ -3,13 +3,13 @@ from typing import List
 import scispacy
 import spacy
 import ujson
+from pattern.en import singularize
 
 from symptom_checker.config import DATA_DIR
 from symptom_checker.includes.utils import (
-    remove_duplicates_in_order,
     flatten_list_of_lists,
+    remove_duplicates_in_order,
 )
-from pattern.en import pluralize, singularize
 
 nlp = spacy.load("en_core_sci_sm")
 

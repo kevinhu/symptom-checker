@@ -5,8 +5,8 @@ import ujson
 from symptom_checker.config import DATA_DIR
 from symptom_checker.includes.db_processing import (
     process_disease,
-    process_disease_symptoms,
     process_disease_genes,
+    process_disease_symptoms,
 )
 
 json_kwargs = {"indent": 2}

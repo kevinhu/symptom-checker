@@ -60,7 +60,7 @@ Finally, to start the server, run
 cd symptom_checker/server && gunicorn server.wsgi
 ```
 
-This will start the server on `http://localhost:8000` by default with the endpoint of interest at `http://localhost:8000/check_symptoms`, accessible via POST.
+This will start the server on `http://localhost:8000` by default with the endpoint of interest at `http://localhost:8000/check_symptoms`, accessible via POST. Note that this takes a couple of seconds because the server has to load a relatively large NLP model used by Scapy.
 
 The parameters for the endpoint are as follows:
 
@@ -70,13 +70,13 @@ The parameters for the endpoint are as follows:
 
 The endpoint is accessible via methods such as `curl`. For instance, use
 
-```
+```bash
 curl \
-		-X POST \
-    --data-urlencode "description=microencephaly, cataracts, and autophagic vacuoles" \
-    --data-urlencode "min_frequency=Occasional" \
-    --data-urlencode "sort_method=num_matched_symptoms" \
-    localhost:8000/check_symptoms/
+	-X POST \
+	--data-urlencode "description=microencephaly, cataracts, and autophagic vacuoles" \
+	--data-urlencode "min_frequency=Occasional" \
+	--data-urlencode "sort_method=num_matched_symptoms" \
+	localhost:8000/check_symptoms/
 ```
 
 
@@ -97,3 +97,17 @@ curl \
 "Seizures, seizures, seizures" # repeated symptoms
 ```
 
+
+
+## Some considerations
+
+- Attempted to deploy to Heroku, but memory usage of NLP modules was too high (about 1.5GB)
+
+- Behavior of the symptom matching:
+
+  - There's also an `Excluded` disease-symptom frequency term, which presumably means that the presence of a symptom excludes the possibility of that disease being present. Current behavior of the filtering algorithm is to exclude diseases if any such symptom is found.
+  - The `sort_method=num_matched_symptoms` takes into account the raw number of matched symptoms and not possible frequency. Intuitively, we'd want to rank a disease matched with "obligated+obligate" symptoms higher than one with "occasional+frequent" ones, but this would require an additional scoring system to be built in.
+  - Queries could contain negative qualifiers such as "The patient has seizures but not autism", but the current behavior of the parser is to just extract noun chunks alone. Some more specific NLP would be required to filter these out.
+  - Queries often have plural forms of symptoms, but the database used appears to only include singular forms (i.e. "seizures" versus "seizure"). Right now, we use the `pattern` library to singularize these forms while also including the plural ones just in case.
+
+  
