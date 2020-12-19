@@ -1,1 +1,2 @@
-web: sh -c 'cd symptom_checker/server && poetry run gunicorn server.wsgi'
+release: ./setup.sh
+web: sh -c 'cd symptom_checker/server && gunicorn server.wsgi'
