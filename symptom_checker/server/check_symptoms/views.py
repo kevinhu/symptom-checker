@@ -17,6 +17,8 @@ VALID_MIN_FREQUENCIES = [
 
 VALID_SORT_METHODS = ["num_matched_symptoms", "first_matched_symptom"]
 
+MAX_DESCRIPTION_LENGTH = 4096
+
 
 # disable CRSF validation
 @csrf_exempt
@@ -24,6 +26,19 @@ def index(request):
     if request.method == "POST":
 
         description = request.POST.get("description")
+
+        if len(description) > MAX_DESCRIPTION_LENGTH:
+
+            return HttpResponse(
+                ujson.dumps(
+                    {
+                        "error": f"description larger than maximum length ({MAX_DESCRIPTION_LENGTH})"
+                    }
+                ),
+                content_type="application/json",
+                status=400,
+            )
+
         min_frequency = request.POST.get("min_frequency")
         sort_method = request.POST.get("sort_method")
 
