@@ -50,9 +50,28 @@ disease_to_symptoms_complete = {
     for disease in disease_to_symptoms
 }
 
+symptom_text_to_ids = {}
+
+for disease in disease_to_symptoms:
+    for symptom in disease["symptoms"]:
+        symptom_id = symptom["symptom_hpo_id"]
+        symptom_text = symptom["symptom_hpo_term"].lower()
+
+        if symptom_text not in symptom_text_to_ids:
+            symptom_text_to_ids[symptom_text] = {symptom_id}
+
+        else:
+            symptom_text_to_ids[symptom_text].add(symptom_id)
+
+symptom_text_to_ids = {
+    symptom_text: list(symptom_ids)
+    for symptom_text, symptom_ids in symptom_text_to_ids.items()
+}
+
 disease_to_genes_ids = {
     disease["disease_code"]: disease["disease_genes"] for disease in disease_to_genes
 }
+
 
 # invert disease-symptoms mapping
 symptoms_to_disease_ids = invert_dict_of_lists(disease_to_symptoms_ids)
@@ -65,6 +84,9 @@ with open(DATA_DIR / "processed" / "symptoms_to_disease_ids.json", "w") as f:
 
 with open(DATA_DIR / "processed" / "disease_to_symptoms_complete.json", "w") as f:
     ujson.dump(disease_to_symptoms_complete, f, **json_kwargs)
+
+with open(DATA_DIR / "processed" / "symptom_text_to_ids.json", "w") as f:
+    ujson.dump(symptom_text_to_ids, f, **json_kwargs)
 
 with open(DATA_DIR / "processed" / "disease_to_genes_ids.json", "w") as f:
     ujson.dump(disease_to_genes_ids, f, **json_kwargs)
