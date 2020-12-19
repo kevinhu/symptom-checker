@@ -1,5 +1,5 @@
-from typing import Dict, Union, List, Any
 import xml.etree.ElementTree as ET
+from typing import Any, Dict, List, Union
 
 
 def process_disease(disease_elem: ET.XML) -> Dict[str, Union[str, List[Any]]]:

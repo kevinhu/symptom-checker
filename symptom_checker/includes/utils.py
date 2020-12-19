@@ -1,5 +1,5 @@
-from typing import Union
 from pathlib import Path
+from typing import Any, Dict, List, Union
 
 import requests
 from tqdm import tqdm
@@ -51,3 +51,27 @@ def download_from_url(url: str, output_path: Union[str, Path], overwrite: bool):
         return False
 
     return True
+
+
+def invert_dict_of_lists(dict_of_lists: Dict[Any, List[Any]]) -> Dict[Any, List[Any]]:
+    """
+    Given a dictionary mapping x -> [a, b, c],
+    invert such that it now maps all a, b, c -> [x].
+    Parameters
+    ----------
+    d: input dictionary of lists
+    Returns
+    -------
+    inverted: output inverted dictionary
+    """
+
+    inverted = {}
+
+    for key, val in dict_of_lists.items():
+        for item in val:
+            if item not in inverted:
+                inverted[item] = [key]
+            else:
+                inverted[item].append(key)
+
+    return inverted

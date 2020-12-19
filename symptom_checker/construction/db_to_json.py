@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+
 import ujson
 
 from symptom_checker.config import DATA_DIR
