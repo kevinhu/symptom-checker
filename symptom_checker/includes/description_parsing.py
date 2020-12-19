@@ -107,16 +107,19 @@ def get_diseases(
 
                 continue
 
+            # get official text term for symptom
             disease_symptom_hpo_term = disease_to_symptoms_complete[disease_id][
                 symptom_id
             ]["symptom_hpo_term"]
 
+            # construct symptom info object
             symptom_info = {
                 "symptom_id": symptom_id,
                 "symptom_hpo_term": disease_symptom_hpo_term,
                 "symptom_frequency": disease_symptom_frequency,
             }
 
+            # create disease if not exists
             if disease_id not in matched_diseases_info:
 
                 matched_diseases_info[disease_id] = {
@@ -125,17 +128,18 @@ def get_diseases(
                     "matched_symptoms": [symptom_info],
                 }
 
+            # otherwise, append symptom to existing disease
             else:
 
                 matched_diseases_info[disease_id]["matched_symptoms"].append(
                     symptom_info
                 )
 
+    # filter out blacklisted diseases
     matched_diseases_info = [
         disease_info
         for disease_id, disease_info in matched_diseases_info.items()
         if disease_id not in disease_blacklist
-        and len(disease_info["matched_symptoms"]) > 0
     ]
 
     # sort by number of matched symptoms (greatest first)
@@ -146,9 +150,9 @@ def get_diseases(
             key=lambda disease_info: -len(disease_info["matched_symptoms"]),
         )
 
+    # sort by position of the first-matched symptom in the text query
     elif sort_method == "first_matched_symptom":
 
-        # sort by position of the first-matched symptom in the text query
         matched_diseases_info = sorted(
             matched_diseases_info,
             key=lambda disease_info: min(

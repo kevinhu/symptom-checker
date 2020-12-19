@@ -27,6 +27,16 @@ def index(request):
 
         description = request.POST.get("description")
 
+        # check that description is not empty
+        if description is None or description == "":
+
+            return HttpResponse(
+                ujson.dumps({"error": "nonempty 'description' field required."}),
+                content_type="application/json",
+                status=400,
+            )
+
+        # check that description is not too long
         if len(description) > MAX_DESCRIPTION_LENGTH:
 
             return HttpResponse(
@@ -42,14 +52,7 @@ def index(request):
         min_frequency = request.POST.get("min_frequency")
         sort_method = request.POST.get("sort_method")
 
-        if description is None or description == "":
-
-            return HttpResponse(
-                ujson.dumps({"error": "nonempty 'description' field required."}),
-                content_type="application/json",
-                status=400,
-            )
-
+        # set default min_frequency
         if min_frequency is None:
             min_frequency = "Very rare"
 
@@ -63,6 +66,7 @@ def index(request):
                 status=400,
             )
 
+        # check sorting method
         if sort_method not in VALID_SORT_METHODS:
 
             error = (
