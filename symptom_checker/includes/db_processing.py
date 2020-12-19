@@ -22,7 +22,11 @@ def process_disease(disease_elem: ET.XML) -> Dict[str, Union[str, List[Any]]]:
     disease_type = disease_elem.find("DisorderType/Name").text
     disease_group = disease_elem.find("DisorderGroup/Name").text
 
-    def process_reference(reference_elem):
+    def process_reference(reference_elem: ET.XML) -> Dict[str, Union[str, List[Any]]]:
+
+        """
+        Process a disease reference element.
+        """
 
         reference_source = reference_elem.find("Source").text
         reference_reference = reference_elem.find("Reference").text
@@ -79,4 +83,72 @@ def process_disease(disease_elem: ET.XML) -> Dict[str, Union[str, List[Any]]]:
         "disease_group": disease_group,
         "disease_references": disease_references,
         "disease_summary": disease_summary,
+    }
+
+
+def process_disease_symptoms(disease_elem: ET.XML) -> Dict[str, Union[str, List[Any]]]:
+
+    """
+    Process a disease-symptoms element in the <DisorderList> group for en_product4.
+    Args:
+        disease_elem:
+            ElementTree object corresponding to the disease and symptoms.
+    Returns:
+        dictionary of disease attributes and symptoms
+    """
+
+    disease_id = disease_elem.attrib["id"]
+
+    # validation and source
+    disease_validation_status = disease_elem.find("ValidationStatus").text
+    disease_validation_online = disease_elem.find("Online").text
+    disease_validation_date = disease_elem.find("ValidationDate").text
+    disease_source = disease_elem.find("Source").text
+
+    # disorder element
+    disorder_elem = disease_elem.find("Disorder")
+
+    disease_code = disorder_elem.find("OrphaCode").text
+    disease_link = disorder_elem.find("ExpertLink").text
+    disease_name = disorder_elem.find("Name").text
+    disease_type = disorder_elem.find("DisorderType/Name").text
+    disease_group = disorder_elem.find("DisorderGroup/Name").text
+
+    symptoms_elem = disorder_elem.find("HPODisorderAssociationList")
+
+    def process_symptom(symptom_elem: ET.XML) -> Dict[str, Union[str, List[Any]]]:
+
+        """
+        Process a disease symptom element.
+        """
+
+        symptom_hpo_elem = symptom_elem.find("HPO")
+
+        symptom_hpo_id = symptom_hpo_elem.find("HPOId").text
+        symptom_hpo_term = symptom_hpo_elem.find("HPOTerm").text
+
+        symptom_frequency = symptom_elem.find("HPOFrequency/Name").text
+        symptom_criteria = symptom_elem.find("DiagnosticCriteria").text
+
+        return {
+            "symptom_hpo_id": symptom_hpo_id,
+            "symptom_hpo_term": symptom_hpo_term,
+            "symptom_frequency": symptom_frequency,
+            "symptom_criteria": symptom_criteria,
+        }
+
+    symptoms = [process_symptom(elem) for elem in symptoms_elem]
+
+    return {
+        "disease_id": disease_id,
+        "disease_validation_status": disease_validation_status,
+        "disease_validation_online": disease_validation_online,
+        "disease_validation_date": disease_validation_date,
+        "disease_source": disease_source,
+        "disease_code": disease_code,
+        "disease_link": disease_link,
+        "disease_name": disease_name,
+        "disease_type": disease_type,
+        "disease_group": disease_group,
+        "symptoms": symptoms,
     }
