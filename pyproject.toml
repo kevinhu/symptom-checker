@@ -14,6 +14,7 @@ spacy = "^2.3.5"
 scispacy = "^0.3.0"
 gunicorn = "^20.0.4"
 django-heroku = "^0.3.1"
+Pattern = "^3.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

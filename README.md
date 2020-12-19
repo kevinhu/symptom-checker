@@ -33,11 +33,13 @@ Next, install dependencies.
 
 ```bash
 # if using Poetry:
-poetry install 
+poetry install
 
 # if using Pip:
 pip3 install -r requirements.txt
 ```
+
+Note: `mysql` must also be installed for the `pattern` package, which is used to convert plural symptoms to singular ones. On macOS, this can be done using `brew install mysql`. On Debian/Ubuntu, try `sudo apt-get install libmysqlclient-dev`.
 
 Installing via Poetry will automatically create a virtual environment. If using Pip, you may want to manually create one before installing, for instance with `python3 -m venv symptom-checker`.
 
@@ -79,19 +81,19 @@ curl \
 
 
 
-## Test cases
+## Test descriptions
 
 ```
 ""
 "."
 " "
-"The patient had a seizure"
-"The patient has seizures and autism"
-"The patient has seizures and seizures and autism"
-"The patient has seizures, autism, and corneal dystrophy"
-"The patient has seizures but no autism"
-"The patient has seizures but not autism"
-"Seizures, autism, microcephaly"
-"Seizures, seizures, seizures"
+"The patient had a seizure" # single symptom
+"The patient has seizures and autism" # plurals + multiple symptoms
+"The patient has seizures and seizures and autism" # more symptoms, one repeated
+"The patient has seizures, autism, and corneal dystrophy" # multi-word symptom
+"The patient has seizures but no autism" # negative (does not work)
+"The patient has seizures but not autism" # negative (does not work)
+"Seizures, autism, microcephaly" # list of symptoms
+"Seizures, seizures, seizures" # repeated symptoms
 ```
 

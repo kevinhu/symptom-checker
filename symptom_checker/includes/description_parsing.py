@@ -9,6 +9,7 @@ from symptom_checker.includes.utils import (
     remove_duplicates_in_order,
     flatten_list_of_lists,
 )
+from pattern.en import pluralize, singularize
 
 nlp = spacy.load("en_core_sci_sm")
 
@@ -51,7 +52,16 @@ def get_symptoms(text: str) -> List[str]:
     noun_chunks = [phrase.text for phrase in nlp(text).noun_chunks]
     noun_chunks = remove_duplicates_in_order(noun_chunks)
 
-    return [phrase.text for phrase in nlp(text).noun_chunks]
+    # include singulars
+    singulars = [singularize(chunk) for chunk in noun_chunks]
+
+    # merge chunks and singulars
+    # https://stackoverflow.com/questions/3471999/how-do-i-merge-two-lists-into-a-single-list
+    noun_chunks = [j for i in zip(noun_chunks, singulars) for j in i]
+
+    noun_chunks = remove_duplicates_in_order(noun_chunks)
+
+    return noun_chunks
 
 
 def get_diseases(
