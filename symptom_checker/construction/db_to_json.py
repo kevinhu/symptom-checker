@@ -11,6 +11,8 @@ from symptom_checker.includes.db_processing import (
 
 json_kwargs = {"indent": 2}
 
+print("Converting XML to JSON")
+
 # parse in XML
 with open(DATA_DIR / "raw" / "en_product1.xml", "r", encoding="ISO-8859-1") as file:
     diseases_xml = file.read()
