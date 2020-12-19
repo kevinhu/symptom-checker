@@ -42,6 +42,14 @@ disease_to_symptoms_ids = {
     for disease in disease_to_symptoms
 }
 
+disease_to_symptoms_complete = {
+    disease["disease_code"]: {
+        symptom["symptom_hpo_id"]: dict_without(symptom, "symptom_hpo_id")
+        for symptom in disease["symptoms"]
+    }
+    for disease in disease_to_symptoms
+}
+
 disease_to_genes_ids = {
     disease["disease_code"]: disease["disease_genes"] for disease in disease_to_genes
 }
@@ -54,6 +62,9 @@ with open(DATA_DIR / "processed" / "disease_to_info_ids.json", "w") as f:
 
 with open(DATA_DIR / "processed" / "symptoms_to_disease_ids.json", "w") as f:
     ujson.dump(symptoms_to_disease_ids, f, **json_kwargs)
+
+with open(DATA_DIR / "processed" / "disease_to_symptoms_complete.json", "w") as f:
+    ujson.dump(disease_to_symptoms_complete, f, **json_kwargs)
 
 with open(DATA_DIR / "processed" / "disease_to_genes_ids.json", "w") as f:
     ujson.dump(disease_to_genes_ids, f, **json_kwargs)
