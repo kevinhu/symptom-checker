@@ -183,7 +183,7 @@ def process_disease_genes(disease_elem: ET.XML) -> Dict[str, Union[str, List[Any
         gene_name = gene_elem.find("Name").text
         gene_symbol = gene_elem.find("Symbol").text
         gene_synonyms = [elem.text for elem in gene_elem.find("SynonymList")]
-        gene_type = gene_elem.find("GeneType").text
+        gene_type = gene_elem.find("GeneType/Name").text
 
         gene_external_references = [
             {

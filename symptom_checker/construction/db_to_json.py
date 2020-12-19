@@ -46,4 +46,4 @@ with open(DATA_DIR / "intermediate" / "disease_to_symptoms.json", "w") as f:
     ujson.dump(disease_to_symptoms, f, **json_kwargs)
 
 with open(DATA_DIR / "intermediate" / "disease_to_genes.json", "w") as f:
-    ujson.dump(disease_to_genes, f)
+    ujson.dump(disease_to_genes, f, **json_kwargs)

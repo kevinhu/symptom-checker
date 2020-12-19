@@ -1,10 +1,39 @@
+from typing import Dict, Any
 import ujson
 
 from symptom_checker.config import DATA_DIR
 from symptom_checker.includes.utils import invert_dict_of_lists
 
+json_kwargs = {"indent": 2}
+
+# load mappings
+with open(DATA_DIR / "intermediate" / "diseases.json", "r") as f:
+    diseases = ujson.load(f)
+
 with open(DATA_DIR / "intermediate" / "disease_to_symptoms.json", "r") as f:
     disease_to_symptoms = ujson.load(f)
+
+with open(DATA_DIR / "intermediate" / "disease_to_genes.json", "r") as f:
+    disease_to_genes = ujson.load(f)
+
+
+def dict_without(dictionary: Dict[Any, Any], without: Any) -> Dict[Any, Any]:
+
+    """
+    Remove a key from a dictionary and return the copy without.
+    """
+
+    new = dictionary.copy()
+    new.pop(without)
+
+    return new
+
+
+# construct ID-based mappings
+disease_to_info_ids = {
+    disease["disease_code"]: dict_without(disease, "disease_code")
+    for disease in diseases
+}
 
 disease_to_symptoms_ids = {
     disease["disease_code"]: [
@@ -13,7 +42,18 @@ disease_to_symptoms_ids = {
     for disease in disease_to_symptoms
 }
 
+disease_to_genes_ids = {
+    disease["disease_code"]: disease["disease_genes"] for disease in disease_to_genes
+}
+
+# invert disease-symptoms mapping
 symptoms_to_disease_ids = invert_dict_of_lists(disease_to_symptoms_ids)
 
+with open(DATA_DIR / "processed" / "disease_to_info_ids.json", "w") as f:
+    ujson.dump(disease_to_info_ids, f, **json_kwargs)
+
 with open(DATA_DIR / "processed" / "symptoms_to_disease_ids.json", "w") as f:
-    ujson.dump(symptoms_to_disease_ids, f)
+    ujson.dump(symptoms_to_disease_ids, f, **json_kwargs)
+
+with open(DATA_DIR / "processed" / "disease_to_genes_ids.json", "w") as f:
+    ujson.dump(disease_to_genes_ids, f, **json_kwargs)
