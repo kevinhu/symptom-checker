@@ -1,23 +1,24 @@
+from typing import Union
 from pathlib import Path
 
 import requests
 from tqdm import tqdm
 
 
-def download_from_url(url, output_path, overwrite=False):
+def download_from_url(url: str, output_path: Union[str, Path], overwrite: bool):
 
     """
     Download a file from a URL.
     Shows progress bar and checks md5sum. Also
     checks if file is already downloaded.
     Args:
-        url: string
+        url:
             URL to download from
-        output_path: string
+        output_path:
             path to save the output to
         overwrite: boolean
             whether or not to overwrite the file if it already exists
-        reference_md5: string
+        reference_md5:
             md5sum to check
         is_retry:
             whether or not the download is a retry (if the md5sum)
