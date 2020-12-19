@@ -1,6 +1,7 @@
 from pathlib import Path
-from tqdm import tqdm
+
 import requests
+from tqdm import tqdm
 
 
 def download_from_url(url, output_path, overwrite=False):

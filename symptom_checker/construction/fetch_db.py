@@ -1,5 +1,5 @@
-from symptom_checker.includes.utils import download_from_url
 from symptom_checker.config import DATA_DIR
+from symptom_checker.includes.utils import download_from_url
 
 # diseases
 download_from_url(
