@@ -60,9 +60,18 @@ def index(request):
                 status=400,
             )
 
-        symptoms = get_symptoms(description)
+        try:
 
-        diseases = get_diseases(symptoms, min_frequency, sort_method)
+            symptoms = get_symptoms(description)
+            diseases = get_diseases(symptoms, min_frequency, sort_method)
+
+        except:
+
+            return HttpResponse(
+                ujson.dumps({"error": "Internal error."}),
+                content_type="application/json",
+                status=500,
+            )
 
         return HttpResponse(
             ujson.dumps({"symptoms": symptoms, "diseases": diseases}),
