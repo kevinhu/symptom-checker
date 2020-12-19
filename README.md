@@ -41,7 +41,7 @@ pip3 install -r requirements.txt
 
 Note: `mysql` must also be installed for the `pattern` package, which is used to convert plural symptoms to singular ones. On macOS, this can be done using `brew install mysql`. On Debian/Ubuntu, try `sudo apt-get install libmysqlclient-dev`.
 
-Installing via Poetry will automatically create a virtual environment. If using Pip, you may want to manually create one before installing, for instance with `python3 -m venv symptom-checker`.
+Installing via Poetry will automatically create a virtual environment that can be accessed with `poetry shell` or executed in with `poetry run <command>`. If using Pip, you may want to manually create one before installing, for instance with `python3 -m venv symptom-checker`. 
 
 The final JSON dictionaries with disease information and symptom+gene associations are included within the repository. If you would like to regenerate them on your own, run
 
@@ -62,11 +62,63 @@ cd symptom_checker/server && gunicorn server.wsgi
 
 This will start the server on `http://localhost:8000` by default with the endpoint of interest at `http://localhost:8000/check_symptoms`, accessible via POST. Note that this takes a couple of seconds because the server has to load a relatively large NLP model used by Scapy.
 
-The parameters for the endpoint are as follows:
+The parameters for the endpoint (url-encoded) are as follows:
 
 - `description` (required): the plaintext query to analyze.
 - `min_frequency`: the minimum frequency of a symptom in a disease to consider. Case-sensitive options include "Very rare", "Occasional", "Frequent", "Very frequent", and "Obligate", in order of exclusivity. If not specified, defaults to "Very rare".
 - `sort_method` (required): how to sort returned diseases. Options are "first_matched_symptom" (show diseases in order of position of first matched symptom in text) and "num_matched_symptoms" (number of supplied symptoms matching the disease).
+
+Given valid parameters, the endpoint will return a JSON response object with the following structure:
+
+```
+{
+	"symptoms": [<list of matched symptoms>, ...],
+  "diseases": [
+    {
+      "disease": {
+        "disease_link": <disease_link>,
+        "disease_name": <disease_name>,
+        "disease_synonyms": [<alternative names for the disease>, ...],
+        "disease_type": <disease_type>,
+        "disease_group": <disease_group>,
+        "disease_summary": <disease_summary>,
+      	"disease_genes": [
+      		{
+            "gene_source": <gene_source>,
+            "gene_name": <gene_source>,
+            "gene_symbol": <gene_symbol>,
+            "gene_synonyms": [<synonymous genes>, ...],
+            "gene_type": <gene_type>,
+            "gene_loci": [<loci>, ...],
+            "gene_association_type": <gene_association_type>,
+            "gene_association_status": <gene_association_status>
+      		}, ...
+      	],
+      	"disease_references": [
+      		{
+            "reference_source": <reference_source>,
+            "reference_reference": <reference identifier>,
+            "reference_relation": <reference_relation>,
+            "reference_icd_relation": <reference_icd_relation>,
+            "reference_validation": <reference_validation>
+           }, ...
+      	],
+    		"matched_symptoms": [
+    			{
+            "symptom_id": <symptom_id>,
+            "symptom_hpo_term": <symptom text name>,
+            "symptom_frequency": <symptom frequency in disease>
+          }, ...
+  			]
+      }
+    }
+  ]
+}
+```
+
+
+
+
 
 The endpoint is accessible via methods such as `curl`. For instance, use
 
