@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import ujson
 
-from symptom_checker.includes.description_parsing import get_symptoms
+from symptom_checker.includes.description_parsing import get_symptoms, get_diseases
 
 
 # disable CRSF validation
@@ -24,8 +24,10 @@ def index(request):
 
         symptoms = get_symptoms(description)
 
+        diseases = get_diseases(symptoms)
+
         return HttpResponse(
-            ujson.dumps({"symptoms": symptoms}),
+            ujson.dumps({"symptoms": symptoms, "diseases": diseases}),
             content_type="application/json",
         )
 

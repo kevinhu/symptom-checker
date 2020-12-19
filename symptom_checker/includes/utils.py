@@ -11,7 +11,9 @@ def download_from_url(url: str, output_path: Union[str, Path], overwrite: bool):
     Download a file from a URL.
     Shows progress bar and checks md5sum. Also
     checks if file is already downloaded.
-    Args:
+
+    Parameters
+    ----------
         url:
             URL to download from
         output_path:
@@ -23,7 +25,9 @@ def download_from_url(url: str, output_path: Union[str, Path], overwrite: bool):
         is_retry:
             whether or not the download is a retry (if the md5sum)
             does not match, is called again
-    Returns:
+
+    Returns
+    -------
         True if download was successful, False otherwise
     """
 
@@ -57,12 +61,14 @@ def invert_dict_of_lists(dict_of_lists: Dict[Any, List[Any]]) -> Dict[Any, List[
     """
     Given a dictionary mapping x -> [a, b, c],
     invert such that it now maps all a, b, c -> [x].
+
     Parameters
     ----------
-    d: input dictionary of lists
+        dict_of_lists: input dictionary of lists
+
     Returns
     -------
-    inverted: output inverted dictionary
+        inverted: output inverted dictionary
     """
 
     inverted = {}
@@ -75,3 +81,38 @@ def invert_dict_of_lists(dict_of_lists: Dict[Any, List[Any]]) -> Dict[Any, List[
                 inverted[item].append(key)
 
     return inverted
+
+
+def remove_duplicates_in_order(list: List[Any]) -> List[Any]:
+    """
+    Remove duplicates in a list, keeping the first occurrence and preserving order.
+
+    Parameters
+    ----------
+        list: input list
+
+    Returns
+    -------
+        deduplicated list
+    """
+
+    # see https://stackoverflow.com/questions/480214/how-do-you-remove-duplicates-from-a-list-whilst-preserving-order
+    seen = set()
+    seen_add = seen.add
+    return [x for x in list if not (x in seen or seen_add(x))]
+
+
+def flatten_list_of_lists(list_of_lists: List[List[Any]]) -> List[Any]:
+    """
+    Flatten a list of lists into a single list.
+    Parameters
+    ----------
+    list_of_lists : list of lists
+    Returns
+    -------
+    flattened: flattened list
+    """
+
+    flattened = [x for y in list_of_lists for x in y]
+
+    return flattened
