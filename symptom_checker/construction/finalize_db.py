@@ -6,6 +6,8 @@ from symptom_checker.includes.utils import invert_dict_of_lists
 
 json_kwargs = {"indent": 2}
 
+print("Making final database files")
+
 # load mappings
 with open(DATA_DIR / "intermediate" / "diseases.json", "r") as f:
     diseases = ujson.load(f)

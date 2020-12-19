@@ -9,7 +9,7 @@ python = "^3.8"
 Django = "^3.1.4"
 tqdm = "^4.54.1"
 ujson = "^4.0.1"
-en_core_sci_md = { url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_core_sci_md-0.3.0.tar.gz" } # the English language model for SpaCy
+en_core_sci_sm = { url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_core_sci_sm-0.3.0.tar.gz" } # the English language model for SpaCy
 spacy = "^2.3.5"
 scispacy = "^0.3.0"
 gunicorn = "^20.0.4"

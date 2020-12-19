@@ -10,7 +10,7 @@ from symptom_checker.includes.utils import (
     flatten_list_of_lists,
 )
 
-nlp = spacy.load("en_core_sci_md")
+nlp = spacy.load("en_core_sci_sm")
 
 CONVERT_PREVALENCE = {
     "Excluded": "Excluded (0%)",

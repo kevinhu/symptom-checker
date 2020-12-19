@@ -197,7 +197,7 @@ psycopg2 = "*"
 whitenoise = "*"
 
 [[package]]
-name = "en-core-sci-md"
+name = "en-core-sci-sm"
 version = "0.3.0"
 description = "Spacy Models for Biomedical Text."
 category = "main"
@@ -209,7 +209,7 @@ spacy = ">=2.3.1"
 
 [package.source]
 type = "url"
-url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_core_sci_md-0.3.0.tar.gz"
+url = "https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.3.0/en_core_sci_sm-0.3.0.tar.gz"
 [[package]]
 name = "gunicorn"
 version = "20.0.4"
@@ -907,7 +907,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e289d9335d3bba2a8509e1c97ed3f3e910b92c5fdc4e60c5ccf63599f7f2a1a4"
+content-hash = "342400915463fb90cc85770ad394c90a48f1fe88c0f8b08e3775a3fb87cdcd94"
 
 [metadata.files]
 appdirs = [
@@ -1007,7 +1007,7 @@ django-heroku = [
     {file = "django-heroku-0.3.1.tar.gz", hash = "sha256:6af4bc3ae4a9b55eaad6dbe5164918982d2762661aebc9f83d9fa49f6009514e"},
     {file = "django_heroku-0.3.1-py2.py3-none-any.whl", hash = "sha256:2bc690aab89eedbe01311752320a9a12e7548e3b0ed102681acc5736a41a4762"},
 ]
-en-core-sci-md = []
+en-core-sci-sm = []
 gunicorn = [
     {file = "gunicorn-20.0.4-py2.py3-none-any.whl", hash = "sha256:cd4a810dd51bf497552cf3f863b575dabd73d6ad6a91075b65936b151cbf4f9c"},
     {file = "gunicorn-20.0.4.tar.gz", hash = "sha256:1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626"},
