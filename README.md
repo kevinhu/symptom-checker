@@ -72,7 +72,7 @@ Given valid parameters, the endpoint will return a JSON response object with the
 
 ```
 {
-	"symptoms": [<list of matched symptoms>, ...],
+  "symptoms": [<list of matched symptoms>, ...],
   "diseases": [
     {
       "disease": {
@@ -83,7 +83,7 @@ Given valid parameters, the endpoint will return a JSON response object with the
         "disease_group": <disease_group>,
         "disease_summary": <disease_summary>,
       	"disease_genes": [
-      		{
+      	  {
             "gene_source": <gene_source>,
             "gene_name": <gene_source>,
             "gene_symbol": <gene_symbol>,
@@ -92,10 +92,10 @@ Given valid parameters, the endpoint will return a JSON response object with the
             "gene_loci": [<loci>, ...],
             "gene_association_type": <gene_association_type>,
             "gene_association_status": <gene_association_status>
-      		}, ...
+      	  }, ...
       	],
       	"disease_references": [
-      		{
+      	  {
             "reference_source": <reference_source>,
             "reference_reference": <reference identifier>,
             "reference_relation": <reference_relation>,
@@ -103,13 +103,13 @@ Given valid parameters, the endpoint will return a JSON response object with the
             "reference_validation": <reference_validation>
            }, ...
       	],
-    		"matched_symptoms": [
-    			{
+    	"matched_symptoms": [
+    	  {
             "symptom_id": <symptom_id>,
             "symptom_hpo_term": <symptom text name>,
             "symptom_frequency": <symptom frequency in disease>
           }, ...
-  			]
+  	]
       }
     }
   ]
