@@ -49,7 +49,7 @@ with open(DATA_DIR / "processed" / "disease_to_genes_ids.json", "r") as f:
 
 def get_symptoms(text: str) -> List[str]:
 
-    noun_chunks = [phrase.text for phrase in nlp(text).noun_chunks]
+    noun_chunks = [phrase.text.lower() for phrase in nlp(text).noun_chunks]
     noun_chunks = remove_duplicates_in_order(noun_chunks)
 
     # include singulars
