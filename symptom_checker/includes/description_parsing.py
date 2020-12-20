@@ -66,7 +66,7 @@ def get_symptoms(text: str) -> List[str]:
 
 def get_diseases(
     symptoms: List[str], min_frequency: str, sort_method: str
-) -> List[str]:
+) -> List[Any]:
 
     symptoms = [symptom for symptom in symptoms if symptom in symptom_text_to_ids]
 

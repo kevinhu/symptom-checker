@@ -20,11 +20,6 @@ def download_from_url(url: str, output_path: Union[str, Path], overwrite: bool):
             path to save the output to
         overwrite: boolean
             whether or not to overwrite the file if it already exists
-        reference_md5:
-            md5sum to check
-        is_retry:
-            whether or not the download is a retry (if the md5sum)
-            does not match, is called again
 
     Returns
     -------
@@ -105,12 +100,14 @@ def remove_duplicates_in_order(list: List[Any]) -> List[Any]:
 def flatten_list_of_lists(list_of_lists: List[List[Any]]) -> List[Any]:
     """
     Flatten a list of lists into a single list.
+
     Parameters
     ----------
-    list_of_lists : list of lists
+        list_of_lists : list of lists
+
     Returns
     -------
-    flattened: flattened list
+        flattened: flattened list
     """
 
     flattened = [x for y in list_of_lists for x in y]
