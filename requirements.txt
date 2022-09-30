@@ -139,9 +139,9 @@ jaraco.functools==3.0.1; python_version >= "3.6" and python_full_version < "3.0.
 jaraco.text==3.2.0; python_version >= "3.6" \
     --hash=sha256:c87569c9afae14f71b2e1c57f316770ab6981ab675d9c602be1c7981161bacdd \
     --hash=sha256:e5078b1126cc0f166c7859aa75103a56c0d0f39ebcafc21695615472e0f810ec
-joblib==1.0.0; python_version >= "3.6" and python_full_version >= "3.6.0" \
-    --hash=sha256:75ead23f13484a2a414874779d69ade40d4fa1abe62b222a23cd50d4bc822f6f \
-    --hash=sha256:7ad866067ac1fdec27d51c8678ea760601b70e32ff1881d4dc8e1171f2b64b24
+joblib==1.2.0; python_version >= "3.6" and python_full_version >= "3.6.0" \
+    --hash=sha256:091138ed78f800342968c523bdde947e7a305b8594b910a0fea2ab83c3c6d385 \
+    --hash=sha256:e1cee4a79e4af22881164f218d4311f60074197fb707e082e803b61f6d137018
 lxml==4.6.2; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" \
     --hash=sha256:a9d6bc8642e2c67db33f1247a77c53476f3a166e09067c0474facb045756087f \
     --hash=sha256:791394449e98243839fa822a637177dd42a95f4883ad3dec2a0ce6ac99fb0a9d \
